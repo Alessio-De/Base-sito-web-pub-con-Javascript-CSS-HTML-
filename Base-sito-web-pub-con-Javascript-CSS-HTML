@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Vintage Pub</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Header e Navigazione */
+        header {
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                        url('/api/placeholder/1200/800') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            padding: 2rem;
+        }
+
+        .hero-content {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #ffd700;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Menu Section */
+        .menu {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .menu h2 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: #1a1a1a;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .menu-item {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .menu-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .menu-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .menu-item-content {
+            padding: 1.5rem;
+        }
+
+        .menu-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .menu-item p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .menu-item .price {
+            color: #ffd700;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        /* Mappa */
+        #map {
+            height: 400px;
+            width: 100%;
+            margin: 3rem 0;
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        /* Animazione per il pulsante */
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: #ffd700;
+            color: #1a1a1a;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.1);
+            background: #ffed4a;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">The Vintage Pub</div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#menu">Menu</a>
+                <a href="#location">Dove Siamo</a>
+                <a href="#contact">Contatti</a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>The Vintage Pub</h1>
+            <p>La migliore birra artigianale e hamburger gourmet della città</p>
+            <a href="#menu" class="cta-button">Scopri il Menu</a>
+        </div>
+    </section>
+
+    <section class="menu" id="menu">
+        <h2>Il Nostro Menu</h2>
+        <div class="menu-grid">
+            <div class="menu-item">
+                <img src="/api/placeholder/400/300" alt="Classic Burger">
+                <div class="menu-item-content">
+                    <h3>Classic Burger</h3>
+                    <p>Hamburger di manzo, insalata, pomodoro, formaggio cheddar</p>
+                    <span class="price">€12.00</span>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="/api/placeholder/400/300" alt="IPA Beer">
+                <div class="menu-item-content">
+                    <h3>IPA Artigianale</h3>
+                    <p>La nostra IPA con note agrumate e luppolatura intensa</p>
+                    <span class="price">€6.00</span>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="/api/placeholder/400/300" alt="Spicy Burger">
+                <div class="menu-item-content">
+                    <h3>Spicy Burger</h3>
+                    <p>Hamburger piccante con jalapenos e salsa chipotle</p>
+                    <span class="price">€14.00</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="location">
+        <div id="map"></div>
+    </section>
+
+    <footer id="contact">
+        <p>The Vintage Pub - Via Roma 123, Milano</p>
+        <p>Tel: +39 02 1234567</p>
+        <p>Email: info@vintagepub.it</p>
+    </footer>
+
+    <script>
+        // Animazioni con GSAP
+        gsap.to(".hero-content", {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.5
+        });
+
+        // Animazione menu items on scroll
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach((item, index) => {
+            gsap.to(item, {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                delay: 0.2 * index,
+                scrollTrigger: {
+                    trigger: item,
+                    start: "top bottom-=100",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.backgroundColor = 'rgba(26, 26, 26, 0.95)';
+            } else {
+                header.style.backgroundColor = '#1a1a1a';
+            }
+        });
+
+        // Inizializzazione mappa Leaflet
+        const map = L.map('map').setView([45.4642, 9.1900], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Aggiunta marker del pub
+        const marker = L.marker([45.4642, 9.1900]).addTo(map);
+        marker.bindPopup("<b>The Vintage Pub</b><br>Via Roma 123, Milano").openPopup();
+
+        // Smooth scroll per i link di navigazione
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
